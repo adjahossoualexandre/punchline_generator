@@ -17,6 +17,15 @@ def get_siblings_names(node):
 def get_siblings(node, tag):
     return node.find_all(tag, recursive=False)
 
+def get_page(page_number, url):
+    '''return a BeautifulSoup obect representing the 
+       page number page_number.
+    '''
+    website = BeautifulSoup(html, 'html.parser')
+    rslt = requests.get(url+str(page_number)+'/')
+    page = BeautifulSoup(rslt.content, 'html.parser')
+    return page
+
 def scrape_page(page):
     '''return a list of punchlines scraped on a specific page.
        (use the code below)
