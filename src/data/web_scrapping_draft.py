@@ -37,6 +37,8 @@ def scrape_page(page):
         # return all caracters located between "«" and "»"
         return string[begining+1:end]
 
+    def retrieve_number_of_posts(page):
+        pass
 
     pat = re.compile('post-')
     # Selecting the tag where the punchlines are located
@@ -47,10 +49,13 @@ def scrape_page(page):
 
     # retrieving the strings that contains the individual punchlines
     page_corpus=[]
-    for post in (posts):
-        string_to_be_cleaned = posts.find('div', class_='post-header').contents[1].get('title')
+    number_of_posts = retrieve_punchline_from_string(page)
+    for post in number_of_posts: # Needs to find the number of posts first
+        string_to_be_cleaned = posts[].find('div', class_='post-header').contents[1].get('title')
         punchline = retrieve_punchline_from_string(string_to_be_cleaned)
         page_corpus.append(punchline)
+    
+    return page_corpus
 
 # Getting the html page
 rslt = requests.get('https://www.punchline.fr/?gdsr_sort=thumbs')
@@ -72,8 +77,7 @@ string_to_be_cleaned = posts[0].find('div', class_='post-header').contents[1].ge
 print(string_to_be_cleaned)
 '''
     Left to do:
-        1) Complete retrieve_punchline_from_string
-           inside scrape_page
+        1) write retrieve_number_of_posts function
         2) iterate through the different pages
 '''
 
