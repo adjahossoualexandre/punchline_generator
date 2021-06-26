@@ -33,6 +33,7 @@ def scrape_page(page):
     def retrieve_punchline_from_string(string):
         pass
 
+
     pat = re.compile('post-')
     # Selecting the tag where the punchlines are located
     narrowed = get_siblings(page.body, 'div')[1]
@@ -63,7 +64,7 @@ narrowed = get_siblings(page.body, 'div')[1]
 posts = narrowed.find_all(name='div', id=pat)
 
 # retrieving the string that contains the first punchline
-string_to_be_cleaned = posts[0].find('div', class_='post-header').contents[1]
+string_to_be_cleaned = posts[0].find('div', class_='post-header').contents[1].get('title')
 
 '''
     Left to do:
@@ -71,3 +72,4 @@ string_to_be_cleaned = posts[0].find('div', class_='post-header').contents[1]
            inside scrape_page
         2) iterate through the different pages
 '''
+
