@@ -48,7 +48,7 @@ def scrape_page(page):
     # retrieving the strings that contains the individual punchlines
     page_corpus=[]
     for post in (posts):
-        string_to_be_cleaned = posts[0].find('div', class_='post-header').contents[1]
+        string_to_be_cleaned = posts.find('div', class_='post-header').contents[1].get('title')
         punchline = retrieve_punchline_from_string(string_to_be_cleaned)
         page_corpus.append(punchline)
 
@@ -69,7 +69,7 @@ posts = narrowed.find_all(name='div', id=pat)
 
 # retrieving the string that contains the first punchline
 string_to_be_cleaned = posts[0].find('div', class_='post-header').contents[1].get('title')
-
+print(string_to_be_cleaned)
 '''
     Left to do:
         1) Complete retrieve_punchline_from_string
