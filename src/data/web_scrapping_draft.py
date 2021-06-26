@@ -31,7 +31,11 @@ def scrape_page(page):
        (use the code below)
     '''
     def retrieve_punchline_from_string(string):
-        pass
+        # locate "«" and "»"
+        begining = string.find('«')
+        end = string.find('»')
+        # return all caracters located between "«" and "»"
+        return string[begining+1:end]
 
 
     pat = re.compile('post-')
