@@ -37,8 +37,6 @@ def scrape_page(page):
         # return all caracters located between "«" and "»"
         return string[begining+1:end]
 
-    def retrieve_number_of_posts(page):
-        pass
 
     pat = re.compile('post-')
     # Selecting the tag where the punchlines are located
@@ -49,9 +47,9 @@ def scrape_page(page):
 
     # retrieving the strings that contains the individual punchlines
     page_corpus=[]
-    number_of_posts = retrieve_punchline_from_string(page)
-    for post in number_of_posts: # Needs to find the number of posts first
-        string_to_be_cleaned = posts[].find('div', class_='post-header').contents[1].get('title')
+    for i in len(posts):
+        post = posts[i]
+        string_to_be_cleaned = post.find('div', class_='post-header').contents[1].get('title')
         punchline = retrieve_punchline_from_string(string_to_be_cleaned)
         page_corpus.append(punchline)
     
