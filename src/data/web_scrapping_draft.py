@@ -25,6 +25,11 @@ def get_page(page_number, url):
     rslt = requests.get(url+str(page_number)+'/')
     page = BeautifulSoup(rslt.content, 'html.parser')
     return page
+    
+def nb_of_pages(url):
+    page_one = get_page(1, url)
+    nb_of_pages = page_one.find('div', class_='wp-pagenavi').text[12:15]
+    return int(nb_of_pages)
 
 def scrape_page(page):
     '''return a list of punchlines scraped on a specific page.
@@ -47,7 +52,8 @@ def scrape_page(page):
 
     # retrieving the strings that contains the individual punchlines
     page_corpus=[]
-    for i in len(posts):
+    nb_of_posts = len(posts)
+    for i in range(nb_of_posts):
         post = posts[i]
         string_to_be_cleaned = post.find('div', class_='post-header').contents[1].get('title')
         punchline = retrieve_punchline_from_string(string_to_be_cleaned)
@@ -56,26 +62,13 @@ def scrape_page(page):
     return page_corpus
 
 # Getting the html page
-rslt = requests.get('https://www.punchline.fr/?gdsr_sort=thumbs')
-html=rslt.content
-page = BeautifulSoup(html, 'html.parser')
+url = 'https://www.punchline.fr/?gdsr_sort=thumbs'
+page = get_page(1, url)
+doc_page_1 = scrape_page(page)
 
-# Each punchline is associated with a post
-# So we'll filter through the div with id begining by 'post-'
-pat = re.compile('post-')
+def nb_of_pages(url):
+    page_one = get_page(1, url)
+    nb_of_pages = page_one.find('div', class_='wp-pagenavi').text[12:15]
+    return int(nb_of_pages)
 
-# Selecting the tag where the punchlines are located
-narrowed = get_siblings(page.body, 'div')[1]
-
-# Selecting the different posts
-posts = narrowed.find_all(name='div', id=pat)
-
-# retrieving the string that contains the first punchline
-string_to_be_cleaned = posts[0].find('div', class_='post-header').contents[1].get('title')
-print(string_to_be_cleaned)
-'''
-    Left to do:
-        1) write retrieve_number_of_posts function
-        2) iterate through the different pages
-'''
-
+nb_of_pages(url)
