@@ -21,11 +21,11 @@ def get_page(page_number, url):
     '''return a BeautifulSoup obect representing the 
        page number page_number.
     '''
-    website = BeautifulSoup(html, 'html.parser')
+    #website = BeautifulSoup(html, 'html.parser')
     rslt = requests.get(url+str(page_number)+'/')
     page = BeautifulSoup(rslt.content, 'html.parser')
     return page
-    
+
 def nb_of_pages(url):
     page_one = get_page(1, url)
     nb_of_pages = page_one.find('div', class_='wp-pagenavi').text[12:15]
@@ -63,12 +63,20 @@ def scrape_page(page):
 
 # Getting the html page
 url = 'https://www.punchline.fr/?gdsr_sort=thumbs'
-page = get_page(1, url)
-doc_page_1 = scrape_page(page)
 
-def nb_of_pages(url):
-    page_one = get_page(1, url)
-    nb_of_pages = page_one.find('div', class_='wp-pagenavi').text[12:15]
-    return int(nb_of_pages)
+#page = get_page(1, url)
+#doc_page_1 = scrape_page(page)
 
-nb_of_pages(url)
+from pdb import set_trace
+url = 'https://www.punchline.fr/?gdsr_sort=thumbs'
+nb_pages = nb_of_pages(url)
+corpus = []
+#for i in range(1, nb_pages+1):
+for i in range(1, 2+1):
+    set_trace()
+    page = get_page(i,url)
+    punchlines_in_this_page = scrape_page(page)
+    corpus.extend(punchlines_in_this_page)
+    print(punchlines_in_this_page[0])
+
+
