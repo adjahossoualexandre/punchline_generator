@@ -22,7 +22,7 @@ def get_page(page_number, url):
        page number page_number.
     '''
     #website = BeautifulSoup(html, 'html.parser')
-    rslt = requests.get(url+str(page_number)+'/')
+    rslt = requests.get(url+'page/'+str(page_number)+'/')
     page = BeautifulSoup(rslt.content, 'html.parser')
     return page
 
@@ -62,21 +62,15 @@ def scrape_page(page):
     return page_corpus
 
 # Getting the html page
-url = 'https://www.punchline.fr/?gdsr_sort=thumbs'
+url = 'https://www.punchline.fr/'
 
-#page = get_page(1, url)
-#doc_page_1 = scrape_page(page)
-
-from pdb import set_trace
-url = 'https://www.punchline.fr/?gdsr_sort=thumbs'
+# Building the corpus
 nb_pages = nb_of_pages(url)
 corpus = []
-#for i in range(1, nb_pages+1):
-for i in range(1, 2+1):
-    set_trace()
+for i in range(1, nb_pages+1):
     page = get_page(i,url)
     punchlines_in_this_page = scrape_page(page)
     corpus.extend(punchlines_in_this_page)
-    print(punchlines_in_this_page[0])
+
 
 
