@@ -18,7 +18,7 @@ def get_siblings(node, tag):
     return node.find_all(tag, recursive=False)
 
 def get_page(page_number, url):
-    '''return a BeautifulSoup obect representing the 
+    '''return a BeautifulSoup object representing the 
        page number page_number.
     '''
     #website = BeautifulSoup(html, 'html.parser')
@@ -56,6 +56,8 @@ def scrape_page(page):
     for i in range(nb_of_posts):
         post = posts[i]
         string_to_be_cleaned = post.find('div', class_='post-header').contents[1].get('title')
+        if type(string_to_be_cleaned) == type(None):
+            string_to_be_cleaned = post.find('div', class_='post-header').contents[2].string
         punchline = retrieve_punchline_from_string(string_to_be_cleaned)
         page_corpus.append(punchline)
     
@@ -70,7 +72,6 @@ corpus = []
 for i in range(1, nb_pages+1):
     page = get_page(i,url)
     punchlines_in_this_page = scrape_page(page)
+    print(i)
     corpus.extend(punchlines_in_this_page)
-
-
 
