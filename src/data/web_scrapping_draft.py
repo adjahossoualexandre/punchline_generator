@@ -72,6 +72,4 @@ corpus = []
 for i in range(1, nb_pages+1):
     page = get_page(i,url)
     punchlines_in_this_page = scrape_page(page)
-    print(i)
     corpus.extend(punchlines_in_this_page)
-
