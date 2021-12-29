@@ -71,7 +71,7 @@ import os
 os.chdir('..')
 os.chdir('..')
 
-with open('data/raw/raw_data.csv', 'w', encoding='utf-8-sig') as f:
+with open('data/raw/raw_data.txt', 'w', encoding='utf-8-sig') as f:
 
     for document in corpus:
         f.write(document+'\n')
