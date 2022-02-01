@@ -30,7 +30,7 @@ def tokenize_quotation_marks(corpus):
         
     return processed_corpus
 
-def manual_contraction_replacement(Corpus):
+def manual_contraction_replacement(corpus):
     processed_corpus=[]
     len_corpus = len(corpus)
     for i in range(len_corpus):
@@ -58,9 +58,7 @@ def manual_contraction_replacement(Corpus):
         if 'mic' in doc:
             doc = doc.replace('mic', 'micro')
 
-        processed_corpus.append(doc)
-
-        return processed_corpus
+    return processed_corpus
 
 # CODE
 
@@ -74,7 +72,7 @@ corpus[0] = corpus[0][1:]
 corpus = tokenize_quotation_marks(corpus)
 
 # Manually replace  SOME contractions by the actual word
-corpus = manual_contraction_replacement(corpus) ''' causes contractions (list) to be empty, to be fixed'''
+corpus = manual_contraction_replacement(corpus) # causes contractions (list) to be empty, to be fixed
 
 ''' Need to handle contraction. Example: "J'me" == "Je me".
         Need to be careful to exceptions such as "ch'vaux"
