@@ -35,6 +35,10 @@ def manual_contraction_replacement(corpus):
     len_corpus = len(corpus)
     for i in range(len_corpus):
         doc = corpus[i]
+        if 'p’tit' in doc:
+            doc = doc.replace('p’tit', 'petit')
+        if 'p’tet' in doc:
+            doc = doc.replace('p’tet', 'peut-être')
         if 'ch’vaux' in doc:
             doc = doc.replace('ch’vaux', 'chevaux')
         if 'stup’' in doc:
