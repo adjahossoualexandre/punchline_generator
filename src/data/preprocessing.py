@@ -58,6 +58,7 @@ def manual_contraction_replacement(corpus):
             doc = doc.replace('mic’', 'micro')
         if 'mic' in doc:
             doc = doc.replace('mic', 'micro')
+        
         doc_amend=doc
         if doc_init!=doc_amend:
             print('there has been a change modification here')
