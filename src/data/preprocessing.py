@@ -35,6 +35,18 @@ def manual_contraction_replacement(corpus):
     len_corpus = len(corpus)
     for i in range(len_corpus):
         doc = corpus[i]
+        if 'zouz’' in doc:
+            doc = doc.replace('zouz’', 'zouz')
+        if 'barbac’' in doc:
+            doc = doc.replace('barbac’', 'barbecue')
+        if 'Di Cap’' in doc:
+            doc = doc.replace('Di Cap’', 'Di Caprio')
+        if 'Sky’' in doc:
+            doc = doc.replace('Sky’', 'Skyrock')
+        if 'Diam’s' in doc:
+            doc = doc.replace('Diam’s', 'Diams')
+        if 'MC’s' in doc:
+            doc = doc.replace('MC’s', 'emcees')
         if 'p’tit' in doc:
             doc = doc.replace('p’tit', 'petit')
         if 'p’tet' in doc:
@@ -108,8 +120,6 @@ for elmt in contractions:
     contra = elmt[:apostrophe_position+1]
     actual_word = elmt[:apostrophe_position] + 'e'
     contraction_dic[contra] = actual_word
-
-
 
 ''' 
 
