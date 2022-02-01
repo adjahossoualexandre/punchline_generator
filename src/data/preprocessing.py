@@ -35,6 +35,7 @@ def manual_contraction_replacement(corpus):
     len_corpus = len(corpus)
     for i in range(len_corpus):
         doc = corpus[i]
+        doc_init=doc
         if 'ch’vaux' in doc:
             doc = doc.replace('ch’vaux', 'chevaux')
         if 'stup’' in doc:
@@ -57,7 +58,9 @@ def manual_contraction_replacement(corpus):
             doc = doc.replace('mic’', 'micro')
         if 'mic' in doc:
             doc = doc.replace('mic', 'micro')
-
+        doc_amend=doc
+        if doc_init!=doc_amend:
+            print('there has been a change modification here')
     return processed_corpus
 
 # CODE
@@ -72,23 +75,23 @@ corpus[0] = corpus[0][1:]
 corpus = tokenize_quotation_marks(corpus)
 
 # Manually replace  SOME contractions by the actual word
-corpus = manual_contraction_replacement(corpus) # causes contractions (list) to be empty, to be fixed
+corpus = manual_contraction_replacement(corpus) 
 
 ''' Need to handle contraction. Example: "J'me" == "Je me".
         Need to be careful to exceptions such as "ch'vaux"
 '''
 
 # list of documents containing apostrophe
-l=[elmt for elmt in corpus if '’' in elmt]
+l=[doc for doc in corpus if '’' in doc]
 # tokenizing
 ll=[*map(lambda string: string.split(' '), l)]
 # list of words with apostrophe
-apo = [elmt for doc in ll for elmt in doc if '’' in elmt]
+apo = [word for doc in ll for word in doc if '’' in word]
 
 # collecting contractions
 ## contractions are when an apostrophe is followed by a consonant (except for H)
 contractions=[]
-vowels = list('aàeéèêiïîoœuûùyhAÀEÉÈÊIÎÏOUÙÛYH') # Notice that H isn't a vowel but still needs to be included in the list
+vowels =list('aàeéèêiïîoœuûùyhAÀEÉÈÊIÎÏOUÙÛYH') # Notice that H isn't a vowel but still needs to be included in the list
 for elmt in set(apo):
     apostrophe = elmt.find('’')
     if elmt[-1]=='’':
@@ -97,7 +100,6 @@ for elmt in set(apo):
         contractions.append(elmt)
 
 # Listing all the contractions and their actual word in a dictionary
-''' '''
 contraction_dic = dict()
 for elmt in contractions:
     apostrophe_position = elmt.find('’')
