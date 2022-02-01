@@ -35,7 +35,6 @@ def manual_contraction_replacement(corpus):
     len_corpus = len(corpus)
     for i in range(len_corpus):
         doc = corpus[i]
-        doc_init=doc
         if 'ch’vaux' in doc:
             doc = doc.replace('ch’vaux', 'chevaux')
         if 'stup’' in doc:
@@ -58,10 +57,8 @@ def manual_contraction_replacement(corpus):
             doc = doc.replace('mic’', 'micro')
         if 'mic' in doc:
             doc = doc.replace('mic', 'micro')
-        
-        doc_amend=doc
-        if doc_init!=doc_amend:
-            print('there has been a change modification here')
+        processed_corpus.append(doc)
+
     return processed_corpus
 
 # CODE
