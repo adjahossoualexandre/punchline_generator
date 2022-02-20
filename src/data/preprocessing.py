@@ -30,11 +30,14 @@ def tokenize_quotation_marks(corpus):
         
     return processed_corpus
 
-def manual_contraction_replacement(corpus):
+def replace_contraction_manually(corpus):
+    ''' Remove '’' that cannot be detected by rule-based methods.'''
     processed_corpus=[]
     len_corpus = len(corpus)
     for i in range(len_corpus):
         doc = corpus[i]
+        if 'Assassin’' in doc:
+            doc = doc.replace('Assassin’', 'Assassin')
         if 'zouz’' in doc:
             doc = doc.replace('zouz’', 'zouz')
         if 'barbac’' in doc:
@@ -120,6 +123,73 @@ for elmt in contractions:
     contra = elmt[:apostrophe_position+1]
     actual_word = elmt[:apostrophe_position] + 'e'
     contraction_dic[contra] = actual_word
+
+
+def find_all(character, string):
+    str_as_list = list(string)
+    sub_in_x = [*map(lambda x: character in x, string)]
+    return np.where(sub_in_x)[0] # [0] avoid returning an ndarray of dimension (integer,)
+
+
+def get_contracted_word(string, idx):
+
+    ''' Extract contracted word from a string based on the position of the apostrophe.
+        Ex: 'je veux qu’tu partes.'
+            Return: 'qu’'
+    '''
+    string = string[:idx+1]
+    len_str = len(string)
+    word = string[idx]
+    for i in range(1, len_str):
+        # Exctract previous index
+        prev_idx = len_str-1 - i
+        # Extract precious letter
+        prev_letter = string[prev_idx]
+        if prev_letter not in [' ', ',', '’']:
+            # Append word
+            word = prev_letter + word
+        else:
+            break
+    return word
+
+
+def replace_contraction(string, contraction_dic):
+
+        ''' Replace contractions by their actual words.
+            eg: 'Moi tu m'parles pas d'age.' -> 'Moi tu me parles pas d'age.'
+        '''
+        
+        left_trimmed=''
+        apostrophe_idx = string.find('’')
+        vowels =list('aàeéèêiïîoœuûùyhAÀEÉÈÊIÎÏOUÙÛYH') # Notice that H isn't a vowel but still needs to be included in the list
+        while apostrophe_idx != -1:
+            next_letter_idx = apostrophe_idx+1
+            next_letter_is_consonent = string[next_letter_idx] not in vowels
+            if next_letter_is_consonent:
+                key = get_contracted_word(string, apostrophe_idx)
+                value = contraction_dic[key]
+                contraction_is_first_word = string[:len(key)] == key
+                if contraction_is_first_word:
+                    left_side = None
+                    right_side = string[next_letter_idx:]
+                    string = value + ' ' + right_side 
+                else:
+                    left_side = string[:apostrophe_idx - len(key)]   
+                    right_side = string[next_letter_idx:]
+                    string = left_side + ' ' + value + ' ' + right_side
+                apostrophe_idx = string.find('’')
+
+            else:
+                left_trimmed += string[:apostrophe_idx+1]
+                string = string[next_letter_idx:] # the right side
+                apostrophe_idx = string.find('’')
+
+        update = left_trimmed + string
+        return update
+
+for i,doc in enumerate(corpus):
+    corpus[i] = replace_contraction(doc, contraction_dic)
+
 
 ''' 
 
