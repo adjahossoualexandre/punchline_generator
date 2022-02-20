@@ -80,57 +80,53 @@ def replace_contraction_manually(corpus):
 
     return processed_corpus
 
-# CODE
+def ensure_space_after_comma(corpus):
+    doc_with_comma_idx = np.where([*map(lambda x: ',' in x, corpus)])[0]
+    for idx in doc_with_comma_idx:
+        doc = corpus[idx]
+        for character_pos, character in enumerate(doc):
+            if character == ',':
+                next_character = doc[character_pos+1]
+                if next_character != ' ':
+                    left = doc[:character_pos+1]
+                    right = doc[character_pos+1:]
+                    doc = left + ' ' + right
+        corpus[idx] = doc
+    return corpus
 
-corpus = read_corpus(r'C:\Users\alexa\punchline_generator\data\raw\raw_data.txt')
+def get_contraction_dic(corpus):
 
-# remove \xa0 at the begining and the end of each document
-corpus = remove_xa0(corpus)
-corpus[0] = corpus[0][1:]
+    ''' Return a dictionary with contractions as keys and their corresponding word as values.
+        eg: contraction_dic['qu’'] -> 'que'
+    '''
 
-# Replace quotation marks with 'START_QUOTATION' and 'END_QUOTATION'
-corpus = tokenize_quotation_marks(corpus)
+    doc_with_apostrophe = [doc for doc in corpus if '’' in doc]
+    token_dwa = [*map(lambda string: string.split(' '), doc_with_apostrophe)]
+    word_with_apostophe = [word for doc in token_dwa for word in doc if '’' in word]
 
-# Manually replace  SOME contractions by the actual word
-corpus = replace_contraction_manually(corpus) 
+    ## contractions are when an apostrophe is followed by a consonant (except for H)
+    contractions=[]
+    vowels = list('aàeéèêiïîoœuûùyhAÀEÉÈÊIÎÏOUÙÛYH') # Notice that H isn't a vowel but still needs to be included in the list
+    for elmt in set(word_with_apostophe):
+        apostrophe = elmt.find('’')
+        if elmt[-1]=='’':
+            contractions.append(elmt)
+        elif elmt[apostrophe+1] not in vowels:
+            contractions.append(elmt)
 
-''' Need to handle contraction. Example: "J'me" == "Je me".
-        Need to be careful to exceptions such as "ch'vaux"
-'''
+    contraction_dic = dict()
+    for elmt in contractions:
+        apostrophe_position = elmt.find('’')
+        contra = elmt[:apostrophe_position+1]
+        actual_word = elmt[:apostrophe_position] + 'e'
+        contraction_dic[contra] = actual_word
 
-# list of documents containing apostrophe
-l = [doc for doc in corpus if '’' in doc]
-
-# tokenizing
-ll=[*map(lambda string: string.split(' '), l)]
-# list of words with apostrophe
-apo = [word for doc in ll for word in doc if '’' in word]
-
-# collecting contractions
-## contractions are when an apostrophe is followed by a consonant (except for H)
-contractions=[]
-vowels =list('aàeéèêiïîoœuûùyhAÀEÉÈÊIÎÏOUÙÛYH') # Notice that H isn't a vowel but still needs to be included in the list
-for elmt in set(apo):
-    apostrophe = elmt.find('’')
-    if elmt[-1]=='’':
-        contractions.append(elmt)
-    elif elmt[apostrophe+1] not in vowels:
-        contractions.append(elmt)
-
-# Listing all the contractions and their actual word in a dictionary
-contraction_dic = dict()
-for elmt in contractions:
-    apostrophe_position = elmt.find('’')
-    contra = elmt[:apostrophe_position+1]
-    actual_word = elmt[:apostrophe_position] + 'e'
-    contraction_dic[contra] = actual_word
-
+    return contraction_dic
 
 def find_all(character, string):
     str_as_list = list(string)
     sub_in_x = [*map(lambda x: character in x, string)]
     return np.where(sub_in_x)[0] # [0] avoid returning an ndarray of dimension (integer,)
-
 
 def get_contracted_word(string, idx):
 
@@ -152,7 +148,6 @@ def get_contracted_word(string, idx):
         else:
             break
     return word
-
 
 def replace_contraction(string, contraction_dic):
 
@@ -187,6 +182,26 @@ def replace_contraction(string, contraction_dic):
 
         update = left_trimmed + string
         return update
+
+# ------------------------ CODE ------------------------ #
+
+corpus = read_corpus(r'C:\Users\alexa\punchline_generator\data\raw\raw_data.txt')
+
+# remove \xa0 at the begining and the end of each document
+corpus = remove_xa0(corpus)
+corpus[0] = corpus[0][1:]
+
+# Ensure commas are always followed by spaces
+corpus = ensure_space_after_comma(corpus)
+
+# Replace quotation marks with 'START_QUOTATION' and 'END_QUOTATION'
+corpus = tokenize_quotation_marks(corpus)
+
+# Manually replace  SOME contractions by the actual word
+corpus = replace_contraction_manually(corpus) 
+
+# Replace remaining contractions
+contraction_dic = get_contraction_dic(corpus)
 
 for i,doc in enumerate(corpus):
     corpus[i] = replace_contraction(doc, contraction_dic)
