@@ -92,14 +92,15 @@ corpus[0] = corpus[0][1:]
 corpus = tokenize_quotation_marks(corpus)
 
 # Manually replace  SOME contractions by the actual word
-corpus = manual_contraction_replacement(corpus) 
+corpus = replace_contraction_manually(corpus) 
 
 ''' Need to handle contraction. Example: "J'me" == "Je me".
         Need to be careful to exceptions such as "ch'vaux"
 '''
 
 # list of documents containing apostrophe
-l=[doc for doc in corpus if '’' in doc]
+l = [doc for doc in corpus if '’' in doc]
+
 # tokenizing
 ll=[*map(lambda string: string.split(' '), l)]
 # list of words with apostrophe
